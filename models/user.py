@@ -11,5 +11,4 @@ class User(Base):
     user_surname = Column("surname", String)
     user_email = Column("email", String, unique=True)  # only unique values in column
     passwd = Column("password", String)
-    user_id = Column(Integer, ForeignKey("task.id"))
-    task = relationship("Task", back_populates="user")
+    tasks = relationship("Task", back_populates="users")

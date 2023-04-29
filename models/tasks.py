@@ -13,4 +13,5 @@ class Task(Base):
     task_create_date = Column("task create date", DateTime)
     task_finish_date = Column("task finish date", DateTime)
     task_status = Column("status", String)
-    user = relationship("task", back_populates="task")
+    task_id = Column(Integer, ForeignKey("user.id"))
+    users = relationship("User", back_populates="tasks")
