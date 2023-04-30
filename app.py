@@ -8,12 +8,12 @@ from models.tasks import Task
 
 
 class SqliteDatabase:
-    def __init__(self, filename: str) -> None:
+    def __init__(self, filename: str = "") -> None:
         self.filename = filename
         # self.base = base
         self.engine = create_engine(f"sqlite:///{self.filename}")
-        self.Session = sessionmaker(bind=self.engine)
-        self.session = self.Session()
+        Session = sessionmaker(bind=self.engine)
+        self.session = Session()
 
     def create_database(self):  # [x]
         Base.metadata.create_all(self.engine, checkfirst=True)
@@ -22,7 +22,7 @@ class SqliteDatabase:
         pass
 
     def register_user(
-        self, user_name: str, user_surname: str, user_email: str, user_passwd: str
+        self, users_name: str, users_surname: str, users_email: str, users_passwd: str
     ):  # [x]
         """_summary_
 
@@ -32,16 +32,12 @@ class SqliteDatabase:
             user_email (str): _description_
             user_passwd (str): _description_
         """ """"""
-        self.user_name = user_name
-        self.user_surname = user_surname
-        self.user_email = user_email
-        self.user_passwd = user_passwd
 
         user_1 = User(
-            user_name=self.user_name,
-            user_surname=self.user_surname,
-            user_email=self.user_email,
-            user_passwd=self.user_passwd,
+            user_name=users_name,
+            user_surname=users_surname,
+            user_email=users_email,
+            user_passwd=users_passwd,
         )
         self.session.add(user_1)
         self.session.commit()
@@ -93,17 +89,39 @@ class SqliteDatabase:
 database = SqliteDatabase(filename="tasks_new.db")
 database.create_database()
 
-# database.register_user(
-#     user_name="Giedrius",
-#     user_surname="Kuprys",
-#     user_email="giedrius@gmail.com",
-#     user_passwd="123",
-# )
+db = SqliteDatabase()
 
+# while True:
+#     choose = int(
+#         input(
+#             "What you want to do:\n 1. Register a user:\n 2. Create a task:\n"
+#             " 3. Edit a user:\n 4. Edit a task:\n 5. Delete a user:\n 6. Delete a task:\n Choose number: "
+#         )
+#     )
+#     if choose == 1:
+#         user_name = input("Enter you name: ")
+#         user_surname = input("Enter you surname: ")
 
-print(
-    database.get_user(
-        users_name="Giedrius", users_surname="Kuprys", users_email="giedrius@gmail.com"
-    )
+#         user_email = input("Enter you email: ")
+#         user_passwd = input("Enter you password: ")
+#         db.register_user(
+#             users_name=user_name,
+#             users_surname=user_surname,
+#             users_email=user_email,
+#             users_passwd=user_passwd,
+#         )
+db.register_user(
+    users_name="Aurimas",
+    users_surname="Kuprys",
+    users_email="aurimasZ@gmail.com",
+    users_passwd="123",
 )
-database.get_password(user_passwd="123")
+
+# print(
+#     database.get_user(
+#         users_name="Giedrius",
+#         users_surname="Kuprys",
+#         users_email="giedrius@gmail.com",
+#     )
+# )
+# database.get_password(user_passwd="123")

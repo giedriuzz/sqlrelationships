@@ -1,4 +1,4 @@
-from sessions import session
+from old_sessions import session
 from models.tasks import Task
 from models.user import User
 
