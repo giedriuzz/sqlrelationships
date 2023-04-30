@@ -25,3 +25,14 @@ while True:
             users_email=user_email,
             users_passwd=user_passwd,
         )
+    if choose == 2:
+        user_email = input("Enter you email: ")
+        user_passwd = input("Enter you password: ")
+        result = db.check_password(users_email=user_email, user_passwd=user_passwd)
+        if result == True:
+            task = input("Enter task: ")
+            task_start = input("Enter task start date (YYYY-MM-DD): ")
+            task_finish = input("Enter task finished data (YYYY-MM-DD): ")
+            db.create_task(task_name=task)
+        else:
+            print("Ilsimės")

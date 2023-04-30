@@ -74,53 +74,49 @@ class SqliteDatabase:
         except:
             return False  # [] užbaigti logiką
 
-    def get_password(self, user_passwd: str):
+    def check_password(self, users_email: str, user_passwd: str):
+        self.users_email = users_email
+
         try:
-            print(self.get_user())
-            user = self.session.query(User).get(self.get_user())
-            print(user)
-            print(user.user_passwd)
-            if user.user_passwd == user_passwd:
-                print("passwd OK")
+            by_user_email = (
+                self.session.query(User).filter_by(user_email=self.users_email).first()
+            )
+
+            if by_user_email.user_passwd == user_passwd:
+                return True
+
         except:
-            print("passwd NOT OK")
+            return False
+
+    def create_task(
+        self,
+        task_name: str = "",
+        task_note: str = "",
+        task_create_data: str = "",
+        task_finish_data: str = "",
+        task_status: str = "",
+    ):
+        by_user_email = (
+            self.session.query(User).filter_by(user_email=self.users_email).first()
+        )
+        task = Task(
+            task_name=task_name,
+            task_note=task_note,
+            task_create_date=task_create_data,
+            task_finish_date=task_finish_data,
+            task_status=task_status,
+        )  # make a task_2
+        user = User(
+            user_name=by_user_email.id
+        )  # create a user for assign task_1 and task_2
+
+        user.tasks.append(task)
+        self.session.add(user)
+        self.session.commit()
 
 
-# database = SqliteDatabase(filename="tasks_new")
-# database.create_database()
+database = SqliteDatabase(filename="tasks")
+database.create_database()
 
-
-# while True:
-#     choose = int(
-#         input(
-#             "What you want to do:\n 1. Register a user:\n 2. Create a task:\n"
-#             " 3. Edit a user:\n 4. Edit a task:\n 5. Delete a user:\n 6. Delete a task:\n Choose number: "
-#         )
-#     )
-#     if choose == 1:
-#         user_name = input("Enter you name: ")
-#         user_surname = input("Enter you surname: ")
-
-#         user_email = input("Enter you email: ")
-#         user_passwd = input("Enter you password: ")
-#         database.register_user(
-#             users_name=user_name,
-#             users_surname=user_surname,
-#             users_email=user_email,
-#             users_passwd=user_passwd,
-#         )
-# database.register_user(
-#     users_name="Aurimas",
-#     users_surname="Kuprys",
-#     users_email="aurimasZ@gmail.com",
-#     users_passwd="123",
-# )
-
-# print(
-#     database.get_user(
-#         users_name="Giedrius",
-#         users_surname="Kuprys",
-#         users_email="giedrius@gmail.com",
-#     )
-# )
-# database.get_password(user_passwd="123")
+database.check_password(users_email="tadas@gmail.com", user_passwd="123")
+database.create_task(task_name="gera užduotis")
