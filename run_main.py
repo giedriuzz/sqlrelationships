@@ -3,6 +3,7 @@ from models.user import User
 
 db = SqliteDatabase(filename="tasks")
 db.create_database()
+
 LONG_DOTS = "--------------------"
 while True:
     print(LONG_DOTS)
