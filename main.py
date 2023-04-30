@@ -6,5 +6,5 @@ from models.user import User
 from models.tasks import Task
 
 
-engine = create_engine("sqlite:///tasks.db")
+engine = create_engine("sqlite:///tasks_new.db")
 Base.metadata.create_all(engine, checkfirst=True)

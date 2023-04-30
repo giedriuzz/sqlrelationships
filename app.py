@@ -8,10 +8,10 @@ from models.tasks import Task
 
 
 class SqliteDatabase:
-    def __init__(self, filename: str = "") -> None:
+    def __init__(self, filename: str) -> None:
         self.filename = filename
         # self.base = base
-        self.engine = create_engine(f"sqlite:///{self.filename}")
+        self.engine = create_engine(f"sqlite:///{self.filename}.db")
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
 
@@ -86,10 +86,9 @@ class SqliteDatabase:
             print("passwd NOT OK")
 
 
-database = SqliteDatabase(filename="tasks_new.db")
-database.create_database()
+# database = SqliteDatabase(filename="tasks_new")
+# database.create_database()
 
-db = SqliteDatabase()
 
 # while True:
 #     choose = int(
@@ -104,18 +103,18 @@ db = SqliteDatabase()
 
 #         user_email = input("Enter you email: ")
 #         user_passwd = input("Enter you password: ")
-#         db.register_user(
+#         database.register_user(
 #             users_name=user_name,
 #             users_surname=user_surname,
 #             users_email=user_email,
 #             users_passwd=user_passwd,
 #         )
-db.register_user(
-    users_name="Aurimas",
-    users_surname="Kuprys",
-    users_email="aurimasZ@gmail.com",
-    users_passwd="123",
-)
+# database.register_user(
+#     users_name="Aurimas",
+#     users_surname="Kuprys",
+#     users_email="aurimasZ@gmail.com",
+#     users_passwd="123",
+# )
 
 # print(
 #     database.get_user(

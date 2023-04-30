@@ -7,7 +7,7 @@ class SqliteDatabase:
     def __init__(self, filename: str, base) -> None:
         self.filename = filename
         self.base = base
-        self.engine = create_engine("sqlite:///{self.filename}")
+        self.engine = create_engine(f"sqlite:///{self.filename}")
         self.session = sessionmaker(bind=self.engine)
 
     def create_database(self):
