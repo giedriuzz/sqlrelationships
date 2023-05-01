@@ -16,7 +16,7 @@ class SqliteDatabase:
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
 
-    def create_database(self):  # [x]
+    def create_database(self):
         Base.metadata.create_all(self.engine, checkfirst=True)
 
     def create_object(self, object: DeclarativeMeta):
@@ -24,7 +24,7 @@ class SqliteDatabase:
 
     def register_user(
         self, users_name: str, users_surname: str, users_email: str, users_passwd: str
-    ):  # [x]
+    ):
         """_summary_
 
         Args:
@@ -83,7 +83,7 @@ class SqliteDatabase:
                 self.session.query(User).filter_by(user_email=self.users_email).first()
             )
 
-            if by_user_email.user_passwd == user_passwd:
+            if by_user_email.user_passwd == user_passwd:  # type:ignore #!
                 return True
 
         except:
@@ -100,9 +100,11 @@ class SqliteDatabase:
         )
 
         task = Task(
-            task_name=task_name, task_note=task_note, task_id=by_user_email.id #type:ignore #!
-        ) 
-        user_one = self.session.query(User).get(by_user_email.id) #type:ignore #!
+            task_name=task_name,
+            task_note=task_note,
+            task_id=by_user_email.id,  # type:ignore #!
+        )
+        user_one = self.session.query(User).get(by_user_email.id)  # type:ignore #!
 
         user_one.tasks.append(task)
         self.session.commit()
