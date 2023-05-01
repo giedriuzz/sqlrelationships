@@ -3,6 +3,7 @@ from sqlalchemy.orm.decl_api import DeclarativeMeta
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError  # error handling
 from db.base import Base
+from datetime import datetime, date
 from models.user import User
 from models.tasks import Task
 
@@ -92,8 +93,8 @@ class SqliteDatabase:
         self,
         task_name: str = "",
         task_note: str = "",
-        task_create_data: str = "",
-        task_finish_data: str = "",
+        task_create_data: datetime = datetime.now(),
+        task_finish_data: datetime = datetime.date(),
         task_status: str = "",
     ):
         by_user_email = (
