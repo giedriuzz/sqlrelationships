@@ -11,7 +11,6 @@ from models.tasks import Task
 class SqliteDatabase:
     def __init__(self, filename: str) -> None:
         self.filename = filename
-        # self.base = base
         self.engine = create_engine(f"sqlite:///{self.filename}.db")
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
@@ -19,12 +18,9 @@ class SqliteDatabase:
     def create_database(self):
         Base.metadata.create_all(self.engine, checkfirst=True)
 
-    def create_object(self, object: DeclarativeMeta):
-        pass
-
     def register_user(
         self, users_name: str, users_surname: str, users_email: str, users_passwd: str
-    ):
+    ) -> None:
         """_summary_
 
         Args:
@@ -94,7 +90,7 @@ class SqliteDatabase:
         user_email: str = "",
         task_name: str = "",
         task_note: str = "",
-    ):
+    ) -> None:
         by_user_email = (
             self.session.query(User).filter_by(user_email=user_email).first()
         )
@@ -108,10 +104,8 @@ class SqliteDatabase:
 
         user_one.tasks.append(task)
         self.session.commit()
+        print("Task created successfully !")
 
 
 database = SqliteDatabase(filename="tasks")
 database.create_database()
-
-database.check_password(users_email="tadas@gmail.com", user_passwd="123")
-database.create_task(user_email="tadas@gmail.com", task_name="gera užduotis")
