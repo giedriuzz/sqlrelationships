@@ -1,12 +1,14 @@
 from app import SqliteDatabase
 from models.user import User
+import time
 
 db = SqliteDatabase(filename="tasks")
 db.create_database()
 
-LONG_DOTS = "--------------------"
+LONG_DASH = "--------------------"
+DOTS = "* * * * * * * * * * * *"
 while True:
-    print(LONG_DOTS)
+    print(LONG_DASH)
     choose = int(
         input(
             "What you want to do?\n--------------------\n 1. Register a user:\n 2. Create a task:\n"
@@ -31,8 +33,11 @@ while True:
         result = db.check_password(users_email=user_email, user_passwd=user_passwd)
         if result == True:
             task = input("Enter task: ")
-            task_start = input("Enter task start date (YYYY-MM-DD): ")
-            task_finish = input("Enter task finished data (YYYY-MM-DD): ")
-            db.create_task(task_name=task)
+            db.create_task(user_email=user_email, task_name=task)
+            print("Task created successfully !")
         else:
-            print("Ilsimės")
+            print()
+            print(DOTS)
+            print("You must first register")
+            print(DOTS)
+            time.sleep(3.0)

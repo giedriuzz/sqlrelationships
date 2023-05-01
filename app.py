@@ -3,7 +3,7 @@ from sqlalchemy.orm.decl_api import DeclarativeMeta
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError  # error handling
 from db.base import Base
-from datetime import datetime, date
+from datetime import datetime, time
 from models.user import User
 from models.tasks import Task
 
@@ -91,28 +91,20 @@ class SqliteDatabase:
 
     def create_task(
         self,
+        user_email: str = "",
         task_name: str = "",
         task_note: str = "",
-        task_create_data: datetime = datetime.now(),
-        task_finish_data: datetime = datetime.date(),
-        task_status: str = "",
     ):
         by_user_email = (
-            self.session.query(User).filter_by(user_email=self.users_email).first()
+            self.session.query(User).filter_by(user_email=user_email).first()
         )
-        task = Task(
-            task_name=task_name,
-            task_note=task_note,
-            task_create_date=task_create_data,
-            task_finish_date=task_finish_data,
-            task_status=task_status,
-        )  # make a task_2
-        user = User(
-            user_name=by_user_email.id
-        )  # create a user for assign task_1 and task_2
 
-        user.tasks.append(task)
-        self.session.add(user)
+        task = Task(
+            task_name=task_name, task_note=task_note, task_id=by_user_email.id #type:ignore #!
+        ) 
+        user_one = self.session.query(User).get(by_user_email.id) #type:ignore #!
+
+        user_one.tasks.append(task)
         self.session.commit()
 
 
@@ -120,4 +112,4 @@ database = SqliteDatabase(filename="tasks")
 database.create_database()
 
 database.check_password(users_email="tadas@gmail.com", user_passwd="123")
-database.create_task(task_name="gera užduotis")
+database.create_task(user_email="tadas@gmail.com", task_name="gera užduotis")
