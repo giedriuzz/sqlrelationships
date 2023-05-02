@@ -71,6 +71,25 @@ class SqliteDatabase:
         except:
             return False  # [] užbaigti logiką
 
+    def get_users(self) -> list:
+        users = self.session.query(User).all()
+        user_id: list = []
+        print("ID")
+        for user in users:
+            print(user.id, user.user_name, user.user_surname, user.user_email)
+            user_id.append(user.id)
+        return user_id
+
+    def delete_user(self, user_id: int):
+        user = self.session.query(User).get(user_id)
+        self.session.delete(user)
+        self.session.commit()
+
+    def delete_user_task(self, task_id: int):
+        task = self.session.query(Task).get(task_id)
+        self.session.delete(task)
+        self.session.commit()
+
     def check_password(self, users_email: str, user_passwd: str):
         self.users_email = users_email
 
@@ -105,6 +124,28 @@ class SqliteDatabase:
         user_one.tasks.append(task)
         self.session.commit()
         print("Task created successfully !")
+
+    def get_tasks(self, user_email: str) -> list:
+        get_user = self.session.query(User).filter_by(user_email=user_email).first()
+        tasks = (
+            self.session.query(Task).filter_by(task_id=get_user.id).all()
+        )  #! #type:ignore
+        return tasks
+
+    def change_task(
+        self,
+        task_id: int,
+        task_name: str,
+        task_note: str,
+        task_finished: str,
+        task_status: str,
+    ):
+        user_task = self.session.query(Task).get(task_id)
+        user_task.task_name = task_name
+        user_task.task_note = task_note
+        user_task.task_finish_date = task_finished
+        user_task.task_status = task_status
+        self.session.commit()
 
 
 database = SqliteDatabase(filename="tasks")
