@@ -1,6 +1,6 @@
 from models.user import User
 from models.tasks import Task
-from old_sessions import session
+from for_tests.old_sessions import session
 
 
 task_1 = Task(task_name="Geras darbas 1")  # make a task_1

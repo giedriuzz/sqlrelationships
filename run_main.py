@@ -2,6 +2,7 @@ from app import SqliteDatabase
 from models.user import User
 from models.tasks import Task
 import time
+from datetime import datetime, date
 
 db = SqliteDatabase(filename="tasks")
 db.create_database()
@@ -69,17 +70,17 @@ while True:
                 get_user.user_name = user_new_name  #! #type:ignore
                 db.session.commit()
                 print("Name changed!")
-            elif change == 2:  # change user name
+            elif change == 2:  # change user surname
                 user_new_surname = input("Write new surname: ")
                 get_user.user_surname = user_new_surname  #! #type:ignore
                 db.session.commit()
                 print("Surname changed!")
-            elif change == 3:  # change user name
+            elif change == 3:  # change user email
                 user_new_email = input("Write new email: ")
                 get_user.user_email = user_new_email  #! #type:ignore
                 db.session.commit()
                 print("Email changed!")
-            elif change == 4:  # change user name
+            elif change == 4:  # change user passwd
                 user_new_passwd = input("Write new password: ")
                 get_user.user_passwd = user_new_passwd  #! #type:ignore
                 db.session.commit()
@@ -113,7 +114,8 @@ while True:
                         f"Change task finish date: {editable_task.task_finish_date} Y/N - "
                     )
                     if finish_date.capitalize() == "Y":
-                        edit_finish_date = input("Edit tas finish date:")
+                        edit_data = input("Edit task finish date YYYY-MM-DD:")
+                        edit_finish_date = datetime.strptime(edit_data, "%Y-%m-%d")
                     else:
                         edit_finish_date = editable_task.task_finish_date
                     status = input(

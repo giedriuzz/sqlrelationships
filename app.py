@@ -59,10 +59,6 @@ class SqliteDatabase:
 
         return user
 
-        # except SQLAlchemyError as e: # only for test
-        # except:
-        #     return False  # [] užbaigti logiką
-
     def get_users(self) -> list:
         users = self.session.query(User).all()
         user_id: list = []
@@ -72,17 +68,17 @@ class SqliteDatabase:
             user_id.append(user.id)
         return user_id
 
-    def delete_user(self, user_id: int):
+    def delete_user(self, user_id: int) -> None:
         user = self.session.query(User).get(user_id)
         self.session.delete(user)
         self.session.commit()
 
-    def delete_user_task(self, task_id: int):
+    def delete_user_task(self, task_id: int) -> None:
         task = self.session.query(Task).get(task_id)
         self.session.delete(task)
         self.session.commit()
 
-    def check_password(self, users_email: str, user_passwd: str):
+    def check_password(self, users_email: str, user_passwd: str) -> None | bool:
         self.users_email = users_email
 
         try:
@@ -142,9 +138,9 @@ class SqliteDatabase:
         task_id: int,
         task_name: str,
         task_note: str,
-        task_finished: str,
+        task_finished: datetime,
         task_status: str,
-    ):
+    ) -> None:
         user_task = self.session.query(Task).get(task_id)
         user_task.task_name = task_name
         user_task.task_note = task_note
