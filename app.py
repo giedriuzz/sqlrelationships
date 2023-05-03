@@ -39,37 +39,29 @@ class SqliteDatabase:
         self.session.add(user_1)
         self.session.commit()
 
-    def get_user(
-        self, users_name: str = "", users_surname: str = "", users_email: str = ""
-    ) -> bool:
+    def get_user(self, user_email: str) -> None:
         """
         Args:
-            users_name (str): _description_
-            users_surname (str): _description_
+
             user_email (str): _description_
 
         Get user from base.
-        function check user name and surname and email
-            if its equal:
-                user can chose to do some things: add task, edit task, delete task
-            if dont equal:
-                user must to register"""
-        try:
-            user = (
-                self.session.query(User)
-                .filter_by(
-                    user_name=users_name,
-                    user_surname=users_surname,
-                    user_email=users_email,
-                )
-                .one()
-            )
+        function check is user email is unique
+        """
 
-            return user.id
+        user = (
+            self.session.query(User)
+            .filter_by(
+                user_email=user_email,
+            )
+            .one()
+        )
+
+        return user
 
         # except SQLAlchemyError as e: # only for test
-        except:
-            return False  # [] užbaigti logiką
+        # except:
+        #     return False  # [] užbaigti logiką
 
     def get_users(self) -> list:
         users = self.session.query(User).all()
@@ -125,12 +117,25 @@ class SqliteDatabase:
         self.session.commit()
         print("Task created successfully !")
 
-    def get_tasks(self, user_email: str) -> list:
+    def get_tasks_by_user(self, user_email: str) -> list:
         get_user = self.session.query(User).filter_by(user_email=user_email).first()
         tasks = (
             self.session.query(Task).filter_by(task_id=get_user.id).all()
         )  #! #type:ignore
-        return tasks
+        print("ID", "  Task name")
+        tasks_id: list = []
+        for n in tasks:
+            print(
+                n.id,
+                "  ",
+                n.task_name,
+                n.task_note,
+                n.task_create_date,
+                n.task_finish_date,
+                n.task_status,
+            )
+            tasks_id.append(n.id)
+        return tasks_id
 
     def change_task(
         self,
