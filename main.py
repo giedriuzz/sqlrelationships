@@ -4,7 +4,7 @@ from database import SqliteDatabase
 class ManageTasks:
     def __init__(self, base: SqliteDatabase) -> None:
         self.db = base
-        print(self.db)
+        self.db.create_database()
 
     def get_user(self, user_email: str) -> None:
         user = self.db.get_user(user_email=user_email)
@@ -17,11 +17,10 @@ class ManageTasks:
     #     return result, user_email
 
 
-print()
+manager = ManageTasks(SqliteDatabase("tasker"))
 
 
 def run():
-    manager = ManageTasks(SqliteDatabase())
     user_email = input("Provide you registered email: ")
     manager.get_user(user_email=user_email)
 
