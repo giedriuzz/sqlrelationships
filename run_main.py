@@ -1,8 +1,8 @@
-from app import SqliteDatabase
+from database import SqliteDatabase
 from models.user import User
 from models.tasks import Task
 import time
-from datetime import datetime, date
+from datetime import datetime
 
 db = SqliteDatabase(filename="tasks")
 db.create_database()
@@ -30,7 +30,7 @@ while True:
     if choose == 1:
         user_email = input("Enter you email: ")
 
-        if db.get_user(user_email=user_email) == user_email:
+        if db.get_user(user_email=user_email) != user_email:
             user_name = input("Enter you name: ")
             user_surname = input("Enter you surname: ")
             user_passwd = input("Enter you password: ")

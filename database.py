@@ -2,7 +2,7 @@ from typing import Optional
 from sqlalchemy import create_engine
 from sqlalchemy.orm.decl_api import DeclarativeMeta
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.exc import SQLAlchemyError  # error handling
+from sqlalchemy.exc import SQLAlchemyError, NoResultFound  # for error handling
 from db.base import Base
 from datetime import datetime, time
 from models.user import User
@@ -50,15 +50,12 @@ class SqliteDatabase:
         function check is user email is unique
         """
 
-        user = (
-            self.session.query(User)
-            .filter_by(
-                user_email=user_email,
-            )
-            .one()
-        )
-
-        return user
+        user = self.session.query(User).filter_by(user_email=user_email).one()
+        try:
+            if user.user_email:
+                return user.user_email
+        except NoResultFound:
+            return None
 
     def get_users(self) -> list[int]:
         users = self.session.query(User).all()
@@ -148,4 +145,7 @@ class SqliteDatabase:
 
 
 database = SqliteDatabase(filename="tasks")
-database.create_database()
+# database.create_database()
+
+if __name__ == "__main__":
+    print(database.get_user(user_email="romas@lts.lt"))

@@ -17,7 +17,7 @@ class ManageTasks:
     #     return result, user_email
 
 
-manager = ManageTasks(SqliteDatabase("tasker"))
+manager = ManageTasks(SqliteDatabase("tasks"))
 
 
 def run():
